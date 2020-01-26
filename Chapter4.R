@@ -225,8 +225,8 @@ rt3_desc %>% filter(VALUE > 0) %>% select(description) %>% pull() %>%
 rt3_desc %>% filter(VALUE < 0) %>% select(description) %>% pull() %>%  
                str_remove_all("\\p{ASCII}|\\p{So}|\\p{Cn}") %>% write("negpos/minus.txt")
 
-rt3_desc %>% filter(VALUE > 0) %>% select(description) %>% pull() %>%  str_remove_all("\\p{ASCII}|\\p{So}|\\p{Cn}") %>% write("/myData/Books/morikita2/Vol2/negpos/plus.txt")
-rt3_desc %>% filter(VALUE <0 ) %>% select(description) %>% pull() %>%  str_remove_all("\\p{ASCII}|\\p{So}|\\p{Cn}")  %>% write("/myData/Books/morikita2/Vol2/negpos/minus.txt")
+rt3_desc %>% filter(VALUE > 0) %>% select(description) %>% pull() %>%  str_remove_all("\\p{ASCII}|\\p{So}|\\p{Cn}") %>% write("negpos/plus.txt")
+rt3_desc %>% filter(VALUE <0 ) %>% select(description) %>% pull() %>%  str_remove_all("\\p{ASCII}|\\p{So}|\\p{Cn}")  %>% write("negpos/minus.txt")
 
 negpos <- docDF("negpos", type = 1, pos = c("名詞", "動詞", "形容詞"))
 negpos <- negpos %>% anti_join(ja_stop_words, by = "TERM")
