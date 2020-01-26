@@ -91,6 +91,12 @@ kokoro_separated %>%  map(function(x)
 library(text2vec)
 gc(); gc()
 kokoro <- readLines("kokoro_separated.txt", warn = FALSE)
+
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(kokoro, file = "kokoro.Rdata");
+### load("kokoro.Rdata") #でオブジェクトを再現できる
+
 tokens <- space_tokenizer(kokoro)
 iter <- itoken(tokens, progressbar = FALSE)
 vocab <- create_vocabulary(iter)
@@ -142,8 +148,11 @@ sort(mat[,1],decreasing = TRUE) %>% head(20) %>% round(3)
 
 sort(mat[,1],decreasing = FALSE) %>% head(20) %>% round(3)
 
+
+
 ## section 6.2.3
 
+# load("iPhone_data.Rdata")
 iPhone_data <- iPhone_data %>% select(Po,text)
 ## for windows users
 if( (.Platform$OS.type == "windows") & Encoding(iPhone_data$text[1]) == "UTF-8"){

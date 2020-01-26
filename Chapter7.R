@@ -42,6 +42,7 @@ results2 %>%  map_df(., ~ tibble(country = .[[1]], similarity = .[[2]]))
 
 ## section 7.2
 
+# load("iPhone_data.Rdata")
 
 library(tidyverse)
 iPhone_data %>% head()

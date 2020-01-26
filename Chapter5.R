@@ -12,6 +12,7 @@ iPhone_spread  <- iPhone_spread %>%
 
 iPhone_spread <- iPhone_spread %>% select(-status_id)
 dim(iPhone_spread)
+
 save(iPhone_spread, file = "iPhone_spread.Rdata")
 
 
@@ -102,7 +103,7 @@ coefs %>%
 dev.off()
 
 
-## Chapter 5 :section 5.6
+## section 5.6
 library(caret)
 
 set.seed(123)
@@ -155,15 +156,11 @@ varImp(glmnet_fit_by_caret_elastic)
 
 
 
-
-
 library(tidymodels)
 iPhone_spread <- iPhone_spread %>% mutate(Po = as.factor(Po))
 splited_data <- initial_split(iPhone_spread, p = 0.5, strata = c('Po')) 
 training_data <- training(splited_data)
-# training_data <- training_data %>% mutate(Po = as.factor(Po)) 
 test_data <- testing(splited_data)
-# test_data <- test_data %>% mutate(Po = as.factor(Po))
 
 rec <- recipe(Po ~ ., data = training_data) 
 rec

@@ -57,6 +57,12 @@ rt %>% filter(user_id %in% c("946562830634926080"))  %>%
                                  "https?://[\\w/:%#\\$&\\?\\(\\)~\\.=\\+\\-]+")) %>% 
                             unique %>% NROW()
 
+
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(rt, file = "rt.Rdata");
+### load("rt.Rdata") #でオブジェクトを再現できる
+
 userIDS <-  rt %>% count(user_id) %>% filter(n > 1) %>% 
                      select(user_id) %>% pull()
 # library(purrr)
@@ -74,10 +80,15 @@ rt2 %>% count(user_id) %>% arrange(n) %>% tail(5)
 rt2 %>% select(text) %>% pull() %>% 
                            write("banpaku.txt")
 
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(rt2, file = "rt2.Rdata");
+### load("rt2.Rdata") #でオブジェクトを再現できる
+
+
 library(RMeCab)
 gc() ; gc()
 txt_df <- docDF("banpaku.txt", type = 1)
-# txt_df  <- docDF("/myData/Books/morikita2/Vol2/banpaku.txt", type = 1)
 
 txt_df %>% select(POS1) %>% distinct() %>% pull()
 
@@ -187,7 +198,13 @@ min %>% map_df(~ filter(rt, status_id %in% .x)) %>%
 ## section 4.8
 rt2 <- rt %>% select( user_id, status_id, screen_name, text) %>%  left_join(dat2)
 rt3 <- rt2 %>% group_by(user_id, screen_name) %>% summarize(VALUE = mean(VALUE, na.rm = TRUE)) %>%
-                 ungroup()
+    ungroup()
+
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(rt3, file = "rt3.Rdata");
+### load("rt3.Rdata") #でオブジェクトを再現できる
+
 rt3 %>% group_by(VALUE > 0) %>% top_n(20, abs(VALUE)) %>%  arrange(VALUE) %>% 
           mutate(user = if_else(VALUE > 0, "PS", "NE"), user = paste0(user, row_number())) %>%   
           ggplot(aes(fct_reorder(user, VALUE), VALUE, fill = VALUE > 0)) +
@@ -215,7 +232,6 @@ negpos <- docDF("negpos", type = 1, pos = c("名詞", "動詞", "形容詞"))
 negpos <- negpos %>% anti_join(ja_stop_words, by = "TERM")
 negpos %>% head()
 
-pdf(file="/myData/Books/morikita2/Vol2/images/banpaku_compairson.pdf")
 library(ggwordcloud)
 negpos %>% select(TERM, minus.txt, plus.txt) %>% gather(key = txt, value = freq, -TERM) %>%
               filter(freq > 1) %>% ggplot(aes(label = TERM, size = freq, col = txt, x = txt)) +
@@ -244,6 +260,11 @@ tweets %>% select(Po, Ne)
 
 
 tweets
+
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(tweets, file = "tweets.Rdata");
+### load("tweets.Rdata") #でオブジェクトを再現できる
 
 library(rtweet)
 iPhone <- tweets %>% filter(genre == "10021") %>% 
@@ -274,9 +295,6 @@ iPhone_data <- iPhone_data %>% filter(xor(Po, Ne))  %>%
 
 dim(iPhone_data)
 
-save(iPhone_data, file = "iPhone_data.Rdata")
-
-
 
 library(RMeCab)
 gc(); gc()
@@ -288,6 +306,10 @@ if( (.Platform$OS.type == "windows") & Encoding(iPhone_data$text[1]) == "UTF-8")
                                                      to = "CP932",
                                                      sub = ""))} else{
                                                      }
+
+
+save(iPhone_data, file = "iPhone_data.Rdata")
+
 
 
 rmecabc_po <- function(id, po, txt){
@@ -334,4 +356,7 @@ iPhone_counts
  ## 4 691118807138435073 アア             6
 
 
+
+
+save(iPhone_counts, file = "iPhone_counts.Rdata")
 

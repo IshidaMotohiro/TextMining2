@@ -20,8 +20,6 @@ colnames(prime) %<>% str_replace("(\\d{4})\\d{4}_(\\d{3})", "\\1_\\2")
 
 prime %>% dim()
 
-
-
 prime <- prime %>% filter(POS2 != "数")
 
 stop_words  <- read_tsv(
@@ -36,6 +34,12 @@ ja_stop_words  <- stop_words %>%
 prime <- prime %>% anti_join(ja_stop_words)
 
 prime %>% dim()
+
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(prime, file = "prime.Rdata");
+### load("prime.Rdata") #でオブジェクトを再現できる
+
 
 duplicated_terms <- prime %>% select(TERM) %>% group_by(TERM) %>%
                                 summarize(N = n()) %>% 
@@ -63,6 +67,12 @@ prime3 <- prime3 %>% t() %>% as.DocumentTermMatrix(weighting = weightTf)
 library(stm)
 prime_dfm <- readCorpus(prime3, type = "slam")
 
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(prime_dfm, file = "prime_dfm.Rdata");
+### load("prime_dfm.Rdata") #でオブジェクトを再現できる
+
+
 ## 年代を表す列を追加する
 prime_year <- prime_dfm[["documents"]] %>% names() %>% str_sub(1,4)
 prime_dfm$meta <- list(Year = as.numeric(prime_year))
@@ -88,6 +98,11 @@ prime_cov <- stm(documents = prime_dfm$documents,
 
 summary(prime_cov)
 
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(prime_cov, file = "prime_cov.Rdata");
+### load("prime_cov.Rdata") #でオブジェクトを再現できる
+
+
 prime_topic_estimate <- estimateEffect(formula = 1:4 ~ Year, 
                                          stmobj = prime_cov, 
                                          metadata = prime_dfm$meta)
@@ -107,6 +122,12 @@ prime_cov2 <- stm(documents = prime_dfm$documents,
 
 
 summary(prime_cov2)
+
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(prime_cov2, file = "prime_cov2.Rdata");
+### load("prime_cov2.Rdata") #でオブジェクトを再現できる
+
 
 prime_topic_estimate2 <- estimateEffect(formula = 1:4 ~ s(Year, 4), 
                                          stmobj = prime_cov2, 
@@ -141,6 +162,14 @@ rownames(prime3) <- prime3_terms
 library(tm)
 prime3 <- prime3 %>% t() %>% as.DocumentTermMatrix(weighting = weightTf)
 
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(prime3, file = "prime3.Rdata");
+### load("prime3.Rdata") #でオブジェクトを再現できる
+
+
+
+
 library(stm)
 prime3_dfm <- readCorpus(prime3, type = "slam")
 
@@ -156,6 +185,10 @@ prime3_cov <- stm(documents = prime3_dfm$documents,
 
 
 summary(prime3_cov)
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(prime3_cov, file = "prime3_cov.Rdata");
+### load("prime3_cov.Rdata") #でオブジェクトを再現できる
 
 
 plot(prime3_cov, type = "perspective", topics = 2)
@@ -189,6 +222,10 @@ kokoro_df %>% select(flag2) %>% table()
 
 kokoro_df <- kokoro_df %>% mutate(section = cumsum(flag2))
 
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(kokoro_df, file = "kokoro_df.Rdata");
+### load("kokoro_df.Rdata") #でオブジェクトを再現できる
+
 kokoro_df2 <- kokoro_df %>% mutate(id = sprintf("Part%s_Section%0.3d", 
                                                  part, section))
 kokoro_df2 %>% select(part, section, id) %>% tail()
@@ -207,6 +244,11 @@ kokoro_df2 %>% NROW()
 # kokoro_df2 %>%  write.csv(file = "kokoro_df2.csv", quote = FALSE, 
 #                           row.names = FALSE)
 # 
+
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(kokoro_df2, file = "kokoro_df2.Rdata");
+### load("kokoro_df2.Rdata") #でオブジェクトを再現できる
 
 kokoro_df2$text[1] %>% Encoding()# unknown on Windows; UTF-8 on Mac
 
@@ -251,6 +293,12 @@ kokoro_dtm <- kokoro_nostopwords %>%
                 cast_dtm(document = "ID", term = "TERM", value = "n")
 
 kokoro_dtm %>% dim()
+
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(kokoro_dtm, file = "kokoro_dtm.Rdata");
+### load("kokoro_dtm.Rdata") #でオブジェクトを再現できる
+
 # library(tm) kokoro_dtm %>% findFreqTerms(5)
 
 # kokoro_dtm <- tm::removeSparseTerms(kokoro_dtm, sparse = 0.33)
@@ -261,6 +309,10 @@ library(topicmodels)
 set.seed(123)
 kokoro_topics <- LDA(kokoro_dtm, k = 9, seed = 123)
 
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(kokoro_topics, file = "kokoro_topics.Rdata");
+### load("kokoro_topics.Rdata") #でオブジェクトを再現できる
 
 library(broom)
 topics <- kokoro_topics %>% tidy() 
@@ -276,10 +328,8 @@ topics20 <- topics %>% group_by(topic) %>% top_n(20,beta) %>%
                  ungroup() %>% mutate(term = reorder(term, beta)) %>% 
                    arrange(topic,-beta)
 
-## library(Cairo)
-## CairoPNG(file ="/myData/Books/morikita2/Vol2/images/p47.png")
-## CairoPDF(file ="p47.pdf", family = "JP1")
-cairo_pdf("p47.pdf", width = 7, height = 7, family = "Meiryo")
+#
+cairo_pdf("p47.pdf", width = 7, height = 7)# for Windows Users # cairo_pdf("p47.pdf", width = 7, height = 7, family = "Meiryo")
 topics20 %>% mutate(term = reorder(term, beta)) %>% 
                group_by(topic,term) %>% arrange(desc(beta)) %>% 
                  ungroup() %>% mutate(term = factor(paste(term, topic, sep = "_"),
@@ -330,6 +380,10 @@ Part <- kokoro_dfm$documents %>% names() %>% str_sub(1,5)
 Time <- seq_along(Part)
 kokoro_dfm$meta <- data.frame(Part, Time)
 
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(kokoro_dfm, file = "kokoro_dfm.Rdata");
+### load("kokoro_dfm.Rdata") #でオブジェクトを再現できる
+
 kokoro_cov0 <- stm(documents = kokoro_dfm$documents, 
                    vocab = kokoro_dfm$vocab, K = 3, prevalence =~ Part + Time,
                    data = kokoro_dfm$meta,  verbose = FALSE)
@@ -355,6 +409,11 @@ kokoro_cov1 <- stm(documents = kokoro_dfm$documents,
 
 
 summary(kokoro_cov1)
+
+
+## 後で再利用することを考えオブジェクトを保存しておく
+## save(kokoro_cov1, file = "kokoro_cov1.Rdata");
+### load("kokoro_cov1.Rdata") #でオブジェクトを再現できる
 
 topic1 <- findThoughts(kokoro_cov1, texts = str_sub(kokoro_df2$text, 1,160), 
                         n = 2, topics = 1)
