@@ -90,6 +90,12 @@ library(RMeCab)
 gc() ; gc()
 txt_df <- docDF("banpaku.txt", type = 1)
 
+
+## 後で再利用することを考えオブジェクトを保存しておく
+save(txt_df, file = "txt_df.Rdata")
+load("txt_df.Rdata")
+
+
 txt_df %>% select(POS1) %>% distinct() %>% pull()
 
 txt_df %>% select(POS2) %>% distinct() %>% pull()
@@ -161,7 +167,7 @@ negaposi %>% select(VALUE) %>% summary()
 
 
 ## for windows users
-if( (.Platform$OS.type == "windows") & Encoding(rt2$text[1]) == "UTF-8"){
+if( (.Platform$OS.type == "windows") & any(unique(Encoding(rt2$text)) %in% "UTF-8")){
   rt2 <- rt2 %>% mutate(text = iconv(text, from = "UTF-8", sub = ""))
   negaposi <- negaposi %>% mutate(TERM = iconv(TERM, from = "UTF-8", sub = ""))
 } else{
@@ -300,7 +306,7 @@ library(RMeCab)
 gc(); gc()
 
 ## for windows users
-if( (.Platform$OS.type == "windows") & Encoding(iPhone_data$text[1]) == "UTF-8"){
+if( (.Platform$OS.type == "windows") & any(unique(Encoding(iPhone_data$text)) %in% "UTF-8")){
   iPhone_data <- iPhone_data %>% mutate(text = iconv(text, 
                                                      from = "UTF-8", 
                                                      to = "CP932",
@@ -310,7 +316,7 @@ if( (.Platform$OS.type == "windows") & Encoding(iPhone_data$text[1]) == "UTF-8")
 
 save(iPhone_data, file = "iPhone_data.Rdata")
 
-
+load("iPhone_data.Rdata")
 
 rmecabc_po <- function(id, po, txt){
      txt <- unlist(RMeCabC(txt, 1))

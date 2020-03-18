@@ -51,16 +51,17 @@ sent_chumon <- tibble(S = sent_chumon) %>% mutate(ID = row_number())
 
 ## Windowsでは文字コードがUTF-8に変換されているのでCP932に戻す
 
+sent_chumon$S[1] %>% Encoding() # unknown on Windows; UTF-8 on Mac
+
+
 ## for windows users
-if( (.Platform$OS.type == "windows") & Encoding(sent_chumon$S[1]) == "UTF-8"){
+if( (.Platform$OS.type == "windows") & any(unique(Encoding(sent_chumon$S)) %in% "UTF-8")){
   sent_chumon <- sent_chumon %>% mutate(S = iconv(S, from = "UTF-8",
                                                   to = "CP932", sub = ""))
 } else{
 }
 
 
-
-sent_chumon$S[1] %>% Encoding() # unknown on Windows; UTF-8 on Mac
 
 ## 最長の文と最短の文
 sent_chumon %>% mutate(N = nchar(S))  %>% 

@@ -241,6 +241,18 @@ kokoro_df2 <- kokoro_df2 %>% filter(!xor(flag1, flag2)) %>%
 kokoro_df2 <- kokoro_df2 %>% group_by(id) %>% 
                 summarize(text = paste(text, collapse = ""))
 kokoro_df2 %>% NROW()
+
+
+kokoro_df2$text[1] %>% Encoding()# unknown on Windows; UTF-8 on Mac
+
+if( (.Platform$OS.type == "windows") & any(unique(Encoding(kokoro_df2$text)) %in% "UTF-8")) {
+  kokoro_df2 <- kokoro_df2 %>% mutate(text = iconv(text, 
+                                                     from = "UTF-8", 
+                                                     to = "CP932",
+                                                       sub = ""))} else{
+                                                       }
+
+
 # kokoro_df2 %>%  write.csv(file = "kokoro_df2.csv", quote = FALSE, 
 #                           row.names = FALSE)
 # 
@@ -249,8 +261,6 @@ kokoro_df2 %>% NROW()
 ## 後で再利用することを考えオブジェクトを保存しておく
 ## save(kokoro_df2, file = "kokoro_df2.Rdata");
 ### load("kokoro_df2.Rdata") #でオブジェクトを再現できる
-
-kokoro_df2$text[1] %>% Encoding()# unknown on Windows; UTF-8 on Mac
 
 
 library(RMeCab)

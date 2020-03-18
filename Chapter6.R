@@ -155,7 +155,7 @@ sort(mat[,1],decreasing = FALSE) %>% head(20) %>% round(3)
 # load("iPhone_data.Rdata")
 iPhone_data <- iPhone_data %>% select(Po,text)
 ## for windows users
-if( (.Platform$OS.type == "windows") & Encoding(iPhone_data$text[1]) == "UTF-8"){
+if( (.Platform$OS.type == "windows") & any(unique(Encoding(iPhone_data$text)) %in% "UTF-8")){
   iPhone_data <- iPhone_data %>% mutate(text = iconv(text, 
                                                      from = "UTF-8", 
                                                      to = "CP932",
