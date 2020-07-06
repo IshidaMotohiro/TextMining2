@@ -83,11 +83,15 @@ prime_selectedK <- searchK(documents = prime_dfm$documents,
 
 save(prime_selectedK, file = "prime_selectedK.Rdata")
 
+
 prime_selectedK$results %>% select(K, lbound,residual, semcoh, heldout) %>%
-                        gather(Metric, Value, -K) %>%
-                          ggplot(aes(K, Value, color = Metric)) +
-                            geom_line(size = 1.5, alpha = 0.7, show.legend = FALSE) +
-                            facet_wrap(~Metric, scales = "free_y") 
+  pivot_longer(-K, names_to = "Metric", values_to = "Value") %>% # gather(Metric, Value, -K) 
+  mutate(K = unlist(K), Value = unlist(Value))  %>% 
+  ggplot(aes(x =K, y = Value, group = Metric)) +
+  geom_line(size = 1.5, alpha = 0.7, show.legend = FALSE) +
+  facet_wrap(~Metric, scales = "free_y") 
+
+
 dev.off()
 
 prime_cov <- stm(documents = prime_dfm$documents, 
