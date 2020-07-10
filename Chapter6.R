@@ -109,10 +109,12 @@ tcm <- create_tcm(iter, vectorizer, skip_grams_window = 10)
 
 RcppParallel::setThreadOptions(1)
 set.seed(789)
-glove <- GlobalVectors$new(word_vectors_size = 100, 
-                           vocabulary = vocab, 
-                           x_max = 10)
 
+# glove <- GlobalVectors$new(word_vectors_size = 100, 
+#                            vocabulary = vocab, 
+#                            x_max = 10)
+glove <- GlobalVectors$new(rank = 100, x_max = 10)# for text2Vec ver.06
+# 以下、本書初版の出力とは一致しないことがあります
 glove_fit_kokoro <- glove$fit_transform(tcm, n_iter = 100)
 
 
