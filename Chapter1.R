@@ -59,19 +59,20 @@ chumon_df %>% filter(TERM == "二人")
 ### 細分類が「接尾」の「人」の27回のそれぞれから25を引く。
 ### データフレームの中身を変更する場合、dplyrでは mutate()を利用する。
 
-  chumon_df <- chumon_df %>% filter(TERM == "二" & POS2 == "数" |
-                                    TERM == "人"
-                                  & POS2 == "接尾") %>%
-                  mutate(chumonno_oi_ryoriten2.txt =
-                         chumonno_oi_ryoriten2.txt - 25)
-
+  chumon_df2 <- chumon_df %>% mutate(across(chumonno_oi_ryoriten2.txt, 
+                                           ~ifelse((TERM == "二" & POS2 == "数" |
+                                                     TERM == "人" & POS2 == "接尾"), 
+                                                   chumonno_oi_ryoriten2.txt -25,
+                                                   chumonno_oi_ryoriten2.txt)))
+chumon_df2 %>% filter(TERM == "二" & POS2 == "数" |
+                        TERM == "人" & POS2 == "接尾")
 ### 最後に add_case() で「二人」を新規のデータとして追加する。
 
-  chumon_df <- chumon_df %>% add_case(TERM = "二人",
+  chumon_df2 <- chumon_df2 %>% add_case(TERM = "二人",
                                       POS1 = "名詞",
                                       POS2 = "数詞",
                                     chumonno_oi_ryoriten2.txt = 25)
-
+chumon_df2
 ### ただし、「二人」以外に出現する「二」や「人」はそのまま残すのは不自然であるともいえる。
 ### 個々の単語を結合する場合、十分な注意が必要である。
 
@@ -130,7 +131,7 @@ bi_net  <- graph_from_data_frame(bigram2)
 ggraph(bi_net, layout = "graphopt") + geom_edge_diagonal(alpha = 1, 
                                         label_colour = "blue") +
                                       geom_node_label(aes(label = name), 
-                                        size = 5, repel = TRUE)
+                                        size = 5, repel = TRUE, max.overlaps =100)
 
 
 
