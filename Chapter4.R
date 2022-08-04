@@ -3,8 +3,22 @@
 # 第 4 章
 ## section 4.2 
 
-library(rtweet)
 
+install.packages("devtools")
+require(devtools)
+
+## 以下の処理はバージョン1.0以降の rtweet では動作したいため
+## 旧バージョンをインストールしてください
+## インストール実行後に選択肢が表示された場合 None: を選び 3 を入力してください。
+
+install_version("rtweet", version = "0.7.0", repos = "http://cran.us.r-project.org")
+
+library(rtweet)
+library(tidyverse)
+## 以下でブするか
+## auth <- rtweet_app() 
+
+## キーなどを指定してトークンを作成する
 myApp <- "*****"
 consumerKey <- "**********************"
 consumerSecret <- "*******************************************"
@@ -24,6 +38,7 @@ rt <- search_tweets(
   "大阪万博", n = 10000, include_rts = FALSE
 )
 
+
 ## Searching for tweets...
 ## This may take a few seconds...
 ##  Warning:  Rate limit exceeded - 88
@@ -35,8 +50,8 @@ rt %>% dim()
 
 rt %>% colnames()
 
-
-save(rt, file = "banpaku.Rdata")
+## 
+# save(rt, file = "banpaku.Rdata")
 
 
 rt %>% select(created_at) %>% summary()
@@ -52,7 +67,9 @@ rt %>% arrange(retweet_count)  %>% select(text) %>%
 
 rt %>% count(user_id) %>% arrange(n) %>% tail(10)
 
-rt %>% filter(user_id %in% c("946562830634926080"))  %>% 
+
+## "12345678901234567" はユーザーが実行時に適当なIDに変更してください
+rt %>% filter(id_str %in% c("2345678901234567"))  %>% 
          select(text) %>% mutate(text = str_remove_all(text, 
                                  "https?://[\\w/:%#\\$&\\?\\(\\)~\\.=\\+\\-]+")) %>% 
                             unique %>% NROW()
@@ -64,7 +81,9 @@ rt %>% filter(user_id %in% c("946562830634926080"))  %>%
 ### load("rt.Rdata") #でオブジェクトを再現できる
 
 userIDS <-  rt %>% count(user_id) %>% filter(n > 1) %>% 
-                     select(user_id) %>% pull()
+                      select(user_id) %>% pull()
+
+userIDS
 # library(purrr)
 rt2 <-  userIDS %>% map_dfr(., {
                       ~ filter(rt, user_id == .) %>%
@@ -92,8 +111,8 @@ txt_df <- docDF("banpaku.txt", type = 1)
 
 
 ## 後で再利用することを考えオブジェクトを保存しておく
-save(txt_df, file = "txt_df.Rdata")
-load("txt_df.Rdata")
+# save(txt_df, file = "txt_df.Rdata")
+# load("txt_df.Rdata")
 
 
 txt_df %>% select(POS1) %>% distinct() %>% pull()
@@ -278,10 +297,10 @@ iPhone <- tweets %>% filter(genre == "10021") %>%
                           pull() %>% lookup_tweets()
 
 
-save(iPhone, file = "iPhone.Rdata")
-
+# save(iPhone, file = "iPhone.Rdata")
 # write_as_csv(iPhone, file = "iPhone.Rdata", 
 #              fileEncoding = "CP932")
+
 
 dim(iPhone)
 
@@ -314,8 +333,9 @@ if( (.Platform$OS.type == "windows") & any(unique(Encoding(iPhone_data$text)) %i
                                                      }
 
 
-save(iPhone_data, file = "iPhone_data.Rdata")
+# save(iPhone_data, file = "iPhone_data.Rdata")
 
+# 
 load("iPhone_data.Rdata")
 
 rmecabc_po <- function(id, po, txt){

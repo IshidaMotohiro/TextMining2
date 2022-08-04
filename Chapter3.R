@@ -3,15 +3,23 @@
 ## 第 3 章
 ## section 3.3 
 
+## 取り上げるデータは日本の歴代総理大臣の所信表明演説です。演説は首相官邸サイト1 からもダウンロードできますが、GitHubにレポジトリ化されているユーザーがいますので、それを利用させてもらいます。
+
+https://github.com/yuukimiyo/GeneralPolicySpeechOfPrimeMinisterOfJapan
+
+## 右端にある [Clone or download] をクリック
+## ポップアップの下にある [Download Zip] を選択
+## longfilename フォルダにある utf8 (Mac/Linux) を適当なフォルダに移す
+## ここではカレントフォルダに data/prime/utf8 というフォルダがあり、ここにすべての所信表明演説ファイルがあるとして、分析を進めていきます。
 
 library(RMeCab)
 gc(); gc()
 prime <- docDF("data/prime/utf8", 
                type = 1, pos = c("名詞", "形容詞", "動詞"))
 
-prime <- docDF("data/prime/sjis", 
-               type = 1, pos = c("名詞", "形容詞", "動詞"))
-
+# prime <- docDF("data/prime/sjis", 
+#                type = 1, pos = c("名詞", "形容詞", "動詞"))
+# 
 ## 列名を短縮化する
 library(tidyverse)
 library(magrittr)
@@ -81,6 +89,7 @@ prime_selectedK <- searchK(documents = prime_dfm$documents,
                            vocab = prime_dfm$vocab, K = 3:10,  
                            data = prime_dfm$meta)
 
+## 後で再利用することを考えオブジェクトを保存しておく
 save(prime_selectedK, file = "prime_selectedK.Rdata")
 
 
@@ -368,7 +377,9 @@ dev.off()
 ## section 3.9
 
 library(ldatuning)
-
+## for Ubuntu you need 
+## sudo apt install libmpfr-dev 
+  
 findK <- FindTopicsNumber(
   kokoro_dtm,
   topics = seq(from = 2, to = 10, by = 1),
