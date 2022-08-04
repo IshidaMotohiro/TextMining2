@@ -344,7 +344,7 @@ rmecabc_po <- function(id, po, txt){
      tibble(status_id = id, Po = po, TERM = txt)
 }
 
-gc() ; gc()
+＃gc() ; gc()
 
 iPhone_tokens <- pmap_dfr(list(iPhone_data$status_id, 
                                iPhone_data$Po, 
