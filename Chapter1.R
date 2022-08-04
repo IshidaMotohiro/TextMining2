@@ -134,3 +134,10 @@ ggraph(bi_net, layout = "graphopt") + geom_edge_diagonal(alpha = 1,
 
 
 
+## サイズの大きいテキスト集合の解析
+## あらかじめ、必要そうなメモリを確保しておくと
+## クラッシュする可能性が減ります
+
+
+df <- data.frame (TERM=rep(NA,10000), POS1=rep(NA,10000), POS2 = rep(NA,10000), test.txt= rep(NA,10000) )
+df <- docDF("test.txt", type = 1, pos = c("名詞","形容詞","動詞"))
