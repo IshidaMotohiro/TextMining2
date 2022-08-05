@@ -5,35 +5,34 @@
 
 
 install.packages("devtools")
-require(devtools)
 
 ## 以下の処理はバージョン1.0以降の rtweet では動作したいため
 ## 旧バージョンをインストールしてください
 ## インストール実行後に選択肢が表示された場合 None: を選び 3 を入力してください。
 
-install_version("rtweet", version = "0.7.0", repos = "http://cran.us.r-project.org")
+devtools::install_version("rtweet", version = "0.7.0", repos = "http://cran.us.r-project.org")
 
 library(rtweet)
 library(tidyverse)
-## 以下でブするか
-## auth <- rtweet_app() 
+## version 0.7.0 を利用する場合以下は不要(指定しても問題ない) ------ ###
+# ###キーなどを指定してトークンを作成する
+# myApp <- "*****"
+# consumerKey <- "**********************"
+# consumerSecret <- "*******************************************"
+# accessToken <- "*******************************************"
+# accessTokenSecret <- "****************************************"
+ 
+# token <- create_token(
+#   app = myApp,
+#   consumer_key = consumerKey,
+#   consumer_secret = consumerSecret ,
+#   access_token =accessToken,
+#   access_secret = accessTokenSecret)
 
-## キーなどを指定してトークンを作成する
-myApp <- "*****"
-consumerKey <- "**********************"
-consumerSecret <- "*******************************************"
-accessToken <- "*******************************************"
-accessTokenSecret <- "****************************************"
-
-token <- create_token(
-  app = myApp,
-  consumer_key = consumerKey,
-  consumer_secret = consumerSecret ,
-  access_token =accessToken,
-  access_secret = accessTokenSecret)
-
-# twitter_app <- oauth_app(app, key = consumerKey, secret = consumerSecret)
-
+## OAuthを明示的に呼び出す関数
+ # twitter_app <- oauth_app(app, key = consumerKey, secret = consumerSecret)
+## ----- ##
+ 
 rt <- search_tweets(
   "大阪万博", n = 10000, include_rts = FALSE
 )

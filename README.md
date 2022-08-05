@@ -49,3 +49,15 @@ xcode-select --install
 https://youtu.be/0ePI8a9kNUI
 
 
+## rtweet について
+
+本書記載の内容を確認するにはアーカイブのバージョン0.7.0を利用してください。
+
+```
+install.packages("devtools")
+devtools::install_version("rtweet", version = "0.7.0", repos = "http://cran.us.r-project.org")
+```
+
+![](figures/rtweet.png)
+
+この場合、Twitter API のトークンを取得する必要はありません。rtweetの関数を実行すると、自動的にブラウザが起動し、Twitter アカウントの認証が求められます。スクリプト(Chapter4.R)を参照してください。
