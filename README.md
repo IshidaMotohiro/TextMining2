@@ -72,3 +72,11 @@ devtools::install_version("rtweet", version = "0.7.0", repos = "http://cran.us.r
 ![](figures/rtweet.png)
 
 この場合、Twitter API のトークンを取得する必要はありません。rtweetの関数を実行すると、自動的にブラウザが起動し、Twitter アカウントの認証が求められます。スクリプト(Chapter4.R)を参照してください。
+
+
+## 本書のデータ分析を Python で実施する方法
+
+『Pythonで学ぶテキストマイニング』
+    出版社  :  シーアンドアール研究所 (2022/8/13)
+    発売日  :  2022/8/13
+    ISBN-13  :  978-4863543935 https://www.amazon.co.jp/dp/486354393X/
