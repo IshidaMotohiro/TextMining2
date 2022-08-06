@@ -56,7 +56,9 @@ xcode-select --install
 
 https://youtu.be/0ePI8a9kNUI
 
-[![alt設定](http://img.youtube.com/vi/{video-id}/0.jpg)](https://www.youtube.com/watch?v={video-id})
+[![MeCab_Install](http://img.youtube.com/vi/0ePI8a9kNUI/0.jpg)](https://www.youtube.com/watch?v=0ePI8a9kNUI)
+
+
 
 ## rtweet について
 
