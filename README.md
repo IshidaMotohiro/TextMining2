@@ -56,6 +56,7 @@ xcode-select --install
 
 https://youtu.be/0ePI8a9kNUI
 
+[![alt設定](http://img.youtube.com/vi/{video-id}/0.jpg)](https://www.youtube.com/watch?v={video-id})
 
 ## rtweet について
 
