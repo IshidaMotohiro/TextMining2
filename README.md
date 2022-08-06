@@ -1,18 +1,24 @@
 # 石田基広『実践 Rによるテキストマイニング』森北出版 スクリプト vers.1.0
 
+以下、Windows 版 R-4.2 への対応と、rtweet バージョン 1.0 に関する注意事項を記します（2022年8月現在）。
 
-## Windows版MeCab のインストールについて
+## Windows 版R 4.2 への対応について
+
+Windows 版 R バージョン 4.2 から、デフォルトの文字コードが UTF-8 となり、またインストールされるのが 64 Bit のみとなりました。
+本書の重版(2022年8月)では対応済みですが、基本、以下が必要となります。
+ 
+### Windows版MeCab のインストールについて
 
 Windows版Rをご利用の場合、Rのバージョンによって、それぞれ異なるインストーラーをダウンロードしてインストールしてください。
 
-### Windows版R-4.1 まで
+#### Windows版R-4.1 まで
 
 工藤拓氏の公式サイト <https://taku910.github.io/mecab/> からインストーラーをダウンロードして、文字コードは標準のShift-JISのままインストールしてください。
 
 またここに登録されているファイルはすべて文字コードが UTF-8 になっています。このため Windows 版 RStudio で開くと、日本語部分が文字化けします。これを修正するには、RStudio のメニューから、File -> Reopen with Encoding -> UTF-8 として開き直します。画面上で文字化けが修正されたことが確認できたら、再び RStudio のメニューから Save with Encoding を指定し CP932 で保存し直してください。
 
 
-### Windows版R-4.2 以降
+#### Windows版R-4.2 以降
 
 ikegami氏の Github サイト <https://github.com/ikegami-yukino/mecab/releases> から私家版MeCabインストーラーをダウンロードし、文字コードはUTF-8を指定してインストールしてください。
 
@@ -20,6 +26,8 @@ ikegami氏の Github サイト <https://github.com/ikegami-yukino/mecab/releases
 
 
 ## macOS での MeCab インストールについて
+
+macOS では、現在、CPUにIntel版とM1(Sillicon)版の2つがあり、MeCab をインストールする場合に注意が必要です。
 
 左上のAppleアイコンをクリックし、「このMacについて」を選びます。ここで、自身が使っている MacOS マシンが Intel 版なのか M1 版なのか、確認しておいてください。
 なおMeCabをインストールするには、Apple 社が無償で公開している Xcode コマンドラインツールが必要です（Xcode本体は不要です）。コマンドラインツールのインストールは、アプリケーションフォルダのユーティリティーフォルダにあるターミナルを起動し、以下の命令を入力してEnterキーを押します。
