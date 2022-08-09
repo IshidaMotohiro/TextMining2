@@ -24,6 +24,7 @@ ikegami氏の Github サイト <https://github.com/ikegami-yukino/mecab/releases
 
 このサイト <https://github.com/IshidaMotohiro/textMining> に登録されているファイルはすべて文字コードが UTF-8 になっていますが、このファイルをそのまま使ってください。Shift-JISに変換する必要はありません。
 
+R-4.1 までは、日本語Windows版Rを利用する場合、解析対象とするなるファイルの文字コードは Shift-JIS(CP932)として用意する必要がありましたが、R-4.2 では、ファイルは UTF-8 でなければなりません。最近の Windows では UTF-8 のファイルをダブルクリックしても文字化けすることはあまりありませんが、たとえば CSV ファイルに全角文字が含まれている場合、文字コードを UTF-8 にして保存すると、CSV ファイルを開くデフォルトのアプリケーションである Excel では文字化するか、そもそも開けません。日本語Windowsでファイルの文字コードを設定するには付属のメモ帳を使うことも可能ですが、例えばTeraPadなどのフリーのエディタを使う方が便利でしょう。https://tera-net.com/library/tpad.html
 
 ## macOS での MeCab インストールについて
 
