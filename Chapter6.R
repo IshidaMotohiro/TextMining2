@@ -4,7 +4,7 @@
 # 第 6 章
 ## section 6.1
 
-
+library(tidyverse) 
 load("tab.Rdata")
 td <- apply(tab[2:11, 2:11], c(1,2), as.integer)
 td <- as.matrix(td) ; rownames(td) <- tab[2:11, 1] ;colnames(td) <- tab[1, 2:11]
@@ -18,14 +18,15 @@ jitX <- jitter(svd_d$u[,1], amount=.1)
 plot(jitX, jitY, type = "n")
 text(jitX, jitY, labels = rownames(td))
 
-
 ## Chapter6 # seciton 6.2
+package = "https://cran.r-project.org/package=softmaxreg&version=1.2"
+utils::install.packages(pkgs = package, repos = NULL)
 library(softmaxreg)
 data(word2vec)
 dim(word2vec)
 
 
-
+install.packages("Rtsne")
 library(Rtsne)
 tsne_words <- Rtsne(as.matrix(word2vec[,-1]),check_duplicate = FALSE, 
                     verbose = TRUE)
@@ -87,7 +88,7 @@ kokoro_separated %>%  map(function(x)
     paste(" ", collapse = "") %>%
     writeLines(con = "kokoro_separated.txt") 
 # 
-
+install.packages("text2vec")
 library(text2vec)
 gc(); gc()
 kokoro <- readLines("kokoro_separated.txt", warn = FALSE)
@@ -207,20 +208,26 @@ writeLines(test_iPhone$SENTENCE, con = "test_iPhone.txt")
 
 train_iPhone %>% head()
 test_iPhone %>% head()
-
+install.packages("fastTextR") # fastTextR パッケージのバージョン 2.0 以降、関数名に変更があります。読者にご指摘いただきました。ここに記して御礼申し上げます。_
 library(fastTextR)
-model <- fasttext("train_iPhone.txt", method = "supervised", 
-                  control = ft.control(nthreads = 3L))
+model <- ft_train("train_iPhone.txt", method = "supervised", #  ver1.0 # fasttext 
+                  control = ft_control(nthreads = 3L))#  ver1.0 # ft.controol 
 
-iPhone_words <- get_words(model)
-word_vec <- get_word_vectors(model, iPhone_words) 
+iPhone_words <- ft_words(model)# get_words(model)
+word_vec <- ft_word_vectors(model, iPhone_words) #  ver1.0 # get_word_vector
 word_vec %>% tail()
 
-preds <- predict(model, newdata_file = "test_iPhone.txt")
+test <- readLines("test_iPhone.txt")
+labels <- trimws(gsub(",.*", "", test))
+table(labels)
+test <- ft_normalize(test)
+test <- trimws(sub(".*?,", "", test))
+head(test, 2)
+preds <- ft_predict(model, newdata = test_iPhone$SENTENCE)# ver1.0 # predict newdata_file = 
 
-
+install.packages("rminer")
 library(rminer)
-mmetric(as.factor(test_iPhone$Eval), as.factor(preds), metric = "ACC")
+mmetric(as.factor(test_iPhone$Eval), preds$label, metric = "ACC")
 
 
 
